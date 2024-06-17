@@ -43,5 +43,135 @@ services:
     restart: always
     labels:
       traefik.enable: 'true'
-      traefik.http.routers.competitor1-backend.rule: HostRegexp(`{_:module-c-1-solution\..*}`)
+      traefik.http.routers.competitor1-backend.rule: HostRegexp(`{_:c-1-solution\..*}`)
       traefik.http.services.competitor1-backend.loadbalancer.server.port: 3000
+
+  competitor2-db:
+    image: mariadb:10.5.15
+    environment:
+      MARIADB_ROOT_PASSWORD: ws240616
+      MARIADB_DATABASE: booom
+    volumes:
+      - ./database_dump.sql:/docker-entrypoint-initdb.d/datadump.sql
+
+  competitor2-backend:
+    build: .
+    environment:
+      - DB_HOST=competitor2-db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_DATABASE=booom
+      - DB_PASSWORD=ws240616
+    volumes:
+      - './:/app'
+    depends_on:
+      - competitor2-db
+    restart: always
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.competitor2-backend.rule: HostRegexp(`{_:c-2-solution\..*}`)
+      traefik.http.services.competitor2-backend.loadbalancer.server.port: 3000
+
+  competitor3-db:
+    image: mariadb:10.5.15
+    environment:
+      MARIADB_ROOT_PASSWORD: ws240616
+      MARIADB_DATABASE: booom
+    volumes:
+      - ./database_dump.sql:/docker-entrypoint-initdb.d/datadump.sql
+
+  competitor3-backend:
+    build: .
+    environment:
+      - DB_HOST=competitor3-db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_DATABASE=booom
+      - DB_PASSWORD=ws240616
+    volumes:
+      - './:/app'
+    depends_on:
+      - competitor3-db
+    restart: always
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.competitor3-backend.rule: HostRegexp(`{_:c-3-solution\..*}`)
+      traefik.http.services.competitor3-backend.loadbalancer.server.port: 3000
+
+  competitor4-db:
+    image: mariadb:10.5.15
+    environment:
+      MARIADB_ROOT_PASSWORD: ws240616
+      MARIADB_DATABASE: booom
+    volumes:
+      - ./database_dump.sql:/docker-entrypoint-initdb.d/datadump.sql
+
+  competitor4-backend:
+    build: .
+    environment:
+      - DB_HOST=competitor4-db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_DATABASE=booom
+      - DB_PASSWORD=ws240616
+    volumes:
+      - './:/app'
+    depends_on:
+      - competitor4-db
+    restart: always
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.competitor4-backend.rule: HostRegexp(`{_:c-4-solution\..*}`)
+      traefik.http.services.competitor4-backend.loadbalancer.server.port: 3000
+
+  competitor5-db:
+    image: mariadb:10.5.15
+    environment:
+      MARIADB_ROOT_PASSWORD: ws240616
+      MARIADB_DATABASE: booom
+    volumes:
+      - ./database_dump.sql:/docker-entrypoint-initdb.d/datadump.sql
+
+  competitor5-backend:
+    build: .
+    environment:
+      - DB_HOST=competitor5-db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_DATABASE=booom
+      - DB_PASSWORD=ws240616
+    volumes:
+      - './:/app'
+    depends_on:
+      - competitor5-db
+    restart: always
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.competitor5-backend.rule: HostRegexp(`{_:c-5-solution\..*}`)
+      traefik.http.services.competitor5-backend.loadbalancer.server.port: 3000
+
+  competitor6-db:
+    image: mariadb:10.5.15
+    environment:
+      MARIADB_ROOT_PASSWORD: ws240616
+      MARIADB_DATABASE: booom
+    volumes:
+      - ./database_dump.sql:/docker-entrypoint-initdb.d/datadump.sql
+
+  competitor6-backend:
+    build: .
+    environment:
+      - DB_HOST=competitor6-db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_DATABASE=booom
+      - DB_PASSWORD=ws240616
+    volumes:
+      - './:/app'
+    depends_on:
+      - competitor6-db
+    restart: always
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.competitor6-backend.rule: HostRegexp(`{_:c-6-solution\..*}`)
+      traefik.http.services.competitor6-backend.loadbalancer.server.port: 3000
