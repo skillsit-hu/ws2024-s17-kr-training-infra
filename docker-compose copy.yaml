@@ -1,0 +1,36 @@
+version: "3.1"
+
+services:
+  db:
+    image: mariadb:10.5.15
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: ws240616
+      MARIADB_DATABASE: booom
+    volumes:
+      - ./database_dump.sql:/docker-entrypoint-initdb.d/datadump.sql
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.0-apache
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=ws240616
+  app:
+    build: .
+    ports:
+      - '7078:3000'
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_DATABASE=booom
+      - DB_PASSWORD=ws240616
+    volumes:
+      - './:/app'
+    depends_on:
+      - db

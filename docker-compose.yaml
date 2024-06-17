@@ -1,0 +1,47 @@
+services:
+  traefik:
+    image: traefik:v2.11.0
+    container_name: traefik
+    restart: unless-stopped
+    command:
+      - '--log.level=DEBUG'
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
+      - "--providers.docker.defaultRule=HostRegexp(`{_:{{ index .Labels \"com.docker.compose.service\" }}\\..*}`)"
+    ports:
+      - '80:80'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.traefik.rule: HostRegexp(`{_:traefik\..*}`)
+      traefik.http.services.traefik.loadbalancer.server.port: 8080
+  
+  competitor1-db:
+    image: mariadb:10.5.15
+    environment:
+      MARIADB_ROOT_PASSWORD: ws240616
+      MARIADB_DATABASE: booom
+    volumes:
+      - ./database_dump.sql:/docker-entrypoint-initdb.d/datadump.sql
+
+  competitor1-backend:
+    build: .
+    environment:
+      - DB_HOST=competitor1-db
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_DATABASE=booom
+      - DB_PASSWORD=ws240616
+    volumes:
+      - './:/app'
+    depends_on:
+      - competitor1-db
+    restart: always
+    labels:
+      traefik.enable: 'true'
+      traefik.http.routers.competitor1-backend.rule: HostRegexp(`{_:module-c-1-solution\..*}`)
+      traefik.http.services.competitor1-backend.loadbalancer.server.port: 3000
